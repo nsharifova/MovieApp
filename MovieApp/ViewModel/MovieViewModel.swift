@@ -2,58 +2,57 @@
 
 import Foundation
 class MovieViewModel {
-    
-    
-    var movie : [Movies] = []
-    var topRatedMovies : [Movies] = []
-    var nowPlayingMovies : [Movies] = []
+    var allMovies: [CategoryMovie] = []
+    var detailInfo : MovieDetail?
     var movieManager = MoviesManager()
-
-    func getPopularMovies(completion: @escaping (Result<[Movies], any Error>) -> Void) {
-        movieManager.getPopularMovies { items , error in
-            
-            if let data = items {
-                self.movie = data
-                completion(.success(data))
-
+    
+    var success : (()->())?
+    var error : ((String)->())?
+    
+    
+    func getMoviesByCategory(){
+        let categories: [MovieCategory] = [.nowPlaying, .popular, .topRated, .upComing]
+        for category in categories {
+            movieManager.getMovies(type: category)  { items , error in
+                if let error = error {
+                    self.error?(error.localizedDescription)
+                    return
+                }
+                if items != nil {
+                    let movie = CategoryMovie(
+                        id: UUID(),
+                        title: "\(category.rawValue)",
+                        movies: items ?? [],
+                        category: category
+                    )
+                    self.allMovies.append(movie)
+                    self.success?()
+                }
+                
+                
             }
-            else if let error {
-                completion(.failure(error.localizedDescription as! Error))
-            }
-            
         }
+        
+    }
+  
+//        func getMovieDetailInfo(id:Int,completion : @escaping (Result<MovieDetail,Error>)->Void){
+//            movieManager.getMovieDetailInfo(id: id){items, error in
+//                if let data = items {
+//                    self.detailInfo = data
+//                    completion(.success(data))
+//    
+//                }
+//                else if let error {
+//                    completion(.failure(error.localizedDescription as! Error))
+//    
+//                }
+//    
+//    
+//            }
+//    
+//        }
+}
 
-    }
-    func getTopRatedMovies(completion: @escaping (Result<[Movies], any Error>) -> Void) {
-        movieManager.getTopRatedMovies { items , error in
-            
-            if let data = items {
-                self.topRatedMovies = data
-                completion(.success(data))
-
-            }
-            else if let error {
-                completion(.failure(error.localizedDescription as! Error))
-            }
-            
-        }
-    }
-    func getNowPlayingMovies(completion: @escaping (Result<[Movies], any Error>) -> Void) {
-        movieManager.getNowPlayingMovies { items , error in
-            
-            if let data = items {
-                self.nowPlayingMovies = data
-                completion(.success(data))
-
-            }
-            else if let error {
-                completion(.failure(error.localizedDescription as! Error))
-            }
-            
-        }
-    }
-    }
-   
 
 
 

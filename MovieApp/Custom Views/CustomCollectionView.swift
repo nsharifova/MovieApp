@@ -1,26 +1,26 @@
 import UIKit
 
 class CustomCollectionView: UIView {
-    
+    var movieViewModel = MovieViewModel()
     var carouselData: [Movies] = []
     var itemSize : CGFloat = 0
     var columnCount : CGFloat = 0
-
+    weak var viewController: UIViewController?
+    
     private lazy var collectionView: UICollectionView = {
-           let layout = UICollectionViewFlowLayout()
-           layout.scrollDirection = .horizontal
-           layout.minimumLineSpacing = 16
-           let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
-           collectionView.dataSource = self
-           collectionView.delegate = self
-           collectionView.translatesAutoresizingMaskIntoConstraints = false
-           collectionView.showsHorizontalScrollIndicator = false
-           collectionView.isPagingEnabled = true
-           collectionView.alwaysBounceVertical = false
-           collectionView.register(CarouselItemCell.self, forCellWithReuseIdentifier: "CarouselItemCell")
-           return collectionView
-       }()
-       
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 16
+        let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.alwaysBounceVertical = false
+        collectionView.register(CarouselItemCell.self, forCellWithReuseIdentifier: "CarouselItemCell")
+        return collectionView
+    }()
+    
     private lazy var dataSource: DataSource = {
         let carouselCellRegistration = UICollectionView.CellRegistration<CarouselItemCell, Movies> { cell, indexPath, itemIdentifier in
             cell.configure(text: itemIdentifier.originalTitle,imagePath: itemIdentifier.posterPath ?? "")
@@ -57,16 +57,16 @@ class CustomCollectionView: UIView {
         dataSource.apply(snapshot)
     }
     override func layoutSubviews() {
-           super.layoutSubviews()
-           
-           guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-           
-           let itemWidth = self.bounds.width / columnCount - itemSize
-           let itemHeight: CGFloat = 240
-           
-           layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-           collectionView.collectionViewLayout.invalidateLayout()
-       }
+        super.layoutSubviews()
+        
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        
+        let itemWidth = self.bounds.width / columnCount - itemSize
+        let itemHeight: CGFloat = 240
+        
+        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
 }
 
 extension CustomCollectionView: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -80,4 +80,27 @@ extension CustomCollectionView: UICollectionViewDataSource, UICollectionViewDele
         cell.configure(text: item.originalTitle, imagePath: item.posterPath ?? "")
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = MovieDetailsView()
+        let item = carouselData[indexPath.item]
+        controller.id = item.id
+        if let navigationController = viewController?.navigationController {
+            movieViewModel.getMovieDetailInfo(id: item.id){ result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        controller.movieDetail = self.movieViewModel.detailInfo
+                        navigationController.pushViewController(controller, animated: true)
+
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+                
+            }
+            
+        } 
+        
+    }
+    
 }

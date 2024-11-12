@@ -6,28 +6,30 @@
 //
 
 import Foundation
-enum MoviesEndpoint {
-    case popular
-    case nowPlaying
-    case topRated
-    case upComing
+
+enum MoviesEndpoint: String {
+    
+    case popular = "/popular"
+    case nowPlaying = "/now_playing"
+    case topRated = "/top_rated"
+    case upComing = "/upcoming"
     
     var url: String {
         switch self {
         case .popular:
-            return "\(Constants.apiUrl)/popular?api_key=\(Constants.apiKey)&language=en-US"
+            return APIManagerHelper.shared.APIUrl(url:MoviesEndpoint.popular.rawValue)
             
         case .nowPlaying:
-            return "\(Constants.apiUrl)/now_playing?api_key=\(Constants.apiKey)"
+            return APIManagerHelper.shared.APIUrl(url:MoviesEndpoint.nowPlaying.rawValue)
+            
         case .topRated:
-            return "\(Constants.apiUrl)/top_rated?api_key=\(Constants.apiKey)"
-
+            return APIManagerHelper.shared.APIUrl(url:MoviesEndpoint.topRated.rawValue)
+            
         case .upComing:
-            return "\(Constants.apiUrl)/upcoming?api_key=\(Constants.apiKey)"
-
+            return APIManagerHelper.shared.APIUrl(url:MoviesEndpoint.upComing.rawValue)
         }
         
- 
+        
     }
-       
+    
 }

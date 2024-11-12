@@ -11,22 +11,18 @@ class BaseViewController: UIViewController {
 
     lazy var activityIndicator: NVActivityIndicatorView = {
         let view = NVActivityIndicatorView(frame: CGRect.zero)
-        
         view.translatesAutoresizingMaskIntoConstraints = false
         view.padding = 15
         view.layer.cornerRadius = 3
         view.type = .circleStrokeSpin
         view.color = #colorLiteral(red: 0.1529411765, green: 0.2431372549, blue: 0.4784313725, alpha: 1)
-        
         return view
     }()
    
   
    override func viewDidLoad() {
        super.viewDidLoad()
-       if #available(iOS 13, *) {
-           overrideUserInterfaceStyle = .light
-       }
+      
    }
    
    
@@ -46,7 +42,7 @@ class BaseViewController: UIViewController {
        return .lightContent
    }
    
-   internal func showActivityIndicator(in view: UIView? = nil, with size: CGSize = CGSize(width: 60, height: 60), color: UIColor = #colorLiteral(red: 0.1176470588, green: 0.1490196078, blue: 0.231372549, alpha: 1)) {
+    func showActivityIndicator(in view: UIView? = nil, with size: CGSize = CGSize(width: 60, height: 60), color: UIColor = #colorLiteral(red: 0.1176470588, green: 0.1490196078, blue: 0.231372549, alpha: 1)) {
        
        if !activityIndicator.isAnimating {
            
@@ -61,7 +57,7 @@ class BaseViewController: UIViewController {
        }
    }
    
-   internal func hideActivityIndicator() {
+    func hideActivityIndicator() {
        view.subviews.forEach { (view) in
            if view == activityIndicator {
                activityIndicator.stopAnimating()
@@ -75,15 +71,6 @@ class BaseViewController: UIViewController {
   
    func backButtonAction() {
        self.dismiss(animated: true, completion: nil)
-   }
-   
-   func hideKeyboardOnTap()  {
-       let tap = UITapGestureRecognizer(target: self, action: #selector(tapped))
-       view.addGestureRecognizer(tap)
-   }
-   
-   @objc func tapped()   {
-       view.endEditing(true)
    }
    
    func showErrorAlert(title: String, message: String) {

@@ -21,11 +21,8 @@ class Service : NetworkSevice {
                 completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
-                if let data = response.data {
-                          print("Response Data: \(String(data: data, encoding: .utf8) ?? "No readable data")")
-                      }
-                      print("Error: \(error)")
-                      completion(.failure(error))
+                print("Error:\(error)")
+
             }
         }
     }
