@@ -35,22 +35,22 @@ class MovieViewModel {
         
     }
   
-//        func getMovieDetailInfo(id:Int,completion : @escaping (Result<MovieDetail,Error>)->Void){
-//            movieManager.getMovieDetailInfo(id: id){items, error in
-//                if let data = items {
-//                    self.detailInfo = data
-//                    completion(.success(data))
-//    
-//                }
-//                else if let error {
-//                    completion(.failure(error.localizedDescription as! Error))
-//    
-//                }
-//    
-//    
-//            }
-//    
-//        }
+        func getMovieDetailInfo(id:Int,completion : @escaping (Result<MovieDetail,Error>)->Void){
+            movieManager.getMovieDetailInfo(id: id){items, error in
+                if let data = items {
+                    self.detailInfo = data
+                    completion(.success(data))
+    
+                }
+                else if let error = error {
+                    completion(.failure(error))
+    
+                }
+    
+    
+            }
+    
+        }
 }
 
 

@@ -9,7 +9,15 @@ import UIKit
 class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     var movieViewModel = MovieViewModel()
     private let menuIcon = CustomButton(imageName: "MenuIcon", target: HomeView.self)
-    private let searchIcon = CustomButton(imageName: "SearchIcon", target: HomeView.self)
+    private let searchField : UITextField = {
+        let field = UITextField()
+        field.placeholder = "Search"
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.borderStyle = .roundedRect
+        field.addPaddingAndIcon(UIImage(named: "SearchIcon")!, padding: 8, isLeftView: false)
+        return field
+    }()
+
     private let mainTitle = CustomLabel(text: "Movies", font: UIFont.boldSystemFont(ofSize: 24))
     
     private lazy var collectionView: UICollectionView = {
@@ -28,15 +36,19 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showActivityIndicator()
+     
         view.addSubview(menuIcon)
-        view.addSubview(searchIcon)
+        view.addSubview(searchField)
         view.addSubview(mainTitle)
         view.addSubview(collectionView)
         setUpConstraints()
+        showActivityIndicator(with: CGSize(width: 80, height: 80), color: UIColor.blue)
+        self.view.bringSubviewToFront(activityIndicator)
+
         movieViewModel.getMoviesByCategory()
         movieViewModel.success = {
             self.collectionView.reloadData()
+            self.hideActivityIndicator()
         }
         movieViewModel.error = { error in
             print(error)
@@ -52,10 +64,10 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
             menuIcon.widthAnchor.constraint(equalToConstant: 24),
             menuIcon.heightAnchor.constraint(equalToConstant: 24),
             
-            searchIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchIcon.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
-            searchIcon.widthAnchor.constraint(equalToConstant: 24),
-            searchIcon.heightAnchor.constraint(equalToConstant: 24),
+            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                searchField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+                searchField.leadingAnchor.constraint(equalTo: menuIcon.trailingAnchor, constant: 16),
+                searchField.heightAnchor.constraint(equalToConstant: 36) ,
             
             mainTitle.topAnchor.constraint(equalTo: menuIcon.bottomAnchor, constant: 24),
             mainTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
@@ -76,6 +88,7 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCarouselCell", for: indexPath) as! HomeCarouselCell
         let item = movieViewModel.allMovies[indexPath.row]
         cell.configure(data:item)
+        cell.viewController = self
         cell.movieData = item.movies
         return cell
     }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81A7AC662CE51672003E14EE /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7AC652CE51672003E14EE /* UITextFieldExtension.swift */; };
+		81A7AC682CE51D69003E14EE /* MovieDetailTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7AC672CE51D69003E14EE /* MovieDetailTabCell.swift */; };
+		81A7AC6C2CE524D9003E14EE /* FavoritesCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7AC6B2CE524D9003E14EE /* FavoritesCollectionCell.swift */; };
 		81AD51382CE22CC000ED36EC /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AD51372CE22CC000ED36EC /* MovieDetailsView.swift */; };
 		81AD513A2CE38D9C00ED36EC /* CarouselItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AD51392CE38D9C00ED36EC /* CarouselItemCell.swift */; };
 		81AD513C2CE3A25800ED36EC /* APIManagerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AD513B2CE3A25800ED36EC /* APIManagerHelper.swift */; };
@@ -36,6 +39,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		81A7AC652CE51672003E14EE /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
+		81A7AC672CE51D69003E14EE /* MovieDetailTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailTabCell.swift; sourceTree = "<group>"; };
+		81A7AC6B2CE524D9003E14EE /* FavoritesCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionCell.swift; sourceTree = "<group>"; };
 		81AD51372CE22CC000ED36EC /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
 		81AD51392CE38D9C00ED36EC /* CarouselItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselItemCell.swift; sourceTree = "<group>"; };
 		81AD513B2CE3A25800ED36EC /* APIManagerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerHelper.swift; sourceTree = "<group>"; };
@@ -77,6 +83,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81A7AC642CE51654003E14EE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				81A7AC652CE51672003E14EE /* UITextFieldExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		81A7AC692CE524AD003E14EE /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				81AECBF02CDE94A20021DCF6 /* HomeCarouselCell.swift */,
+				81AD51392CE38D9C00ED36EC /* CarouselItemCell.swift */,
+				81A7AC672CE51D69003E14EE /* MovieDetailTabCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		81A7AC6A2CE524C4003E14EE /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				81A7AC6B2CE524D9003E14EE /* FavoritesCollectionCell.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
 		81AECBCB2CDE1C3A0021DCF6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,11 +153,11 @@
 		81AECBDA2CDE1DEB0021DCF6 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				81A7AC6A2CE524C4003E14EE /* Favorites */,
+				81A7AC692CE524AD003E14EE /* Home */,
 				81AECBDB2CDE1E020021DCF6 /* BaseViewController.swift */,
 				81AECBE52CDE39F10021DCF6 /* CustomButton.swift */,
 				81ADB96E2CDF3B6000E24201 /* CustomLabel.swift */,
-				81AECBF02CDE94A20021DCF6 /* HomeCarouselCell.swift */,
-				81AD51392CE38D9C00ED36EC /* CarouselItemCell.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -193,6 +225,7 @@
 		81B25D172CDD365300FA96E6 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				81A7AC642CE51654003E14EE /* Extensions */,
 				81ADB9722CDFF47300E24201 /* Constant.swift */,
 				81B25D1B2CDD388000FA96E6 /* Enums */,
 			);
@@ -336,12 +369,15 @@
 				81AECBD92CDE1CB80021DCF6 /* LibraryView.swift in Sources */,
 				81ADB9732CDFF47300E24201 /* Constant.swift in Sources */,
 				81AD513A2CE38D9C00ED36EC /* CarouselItemCell.swift in Sources */,
+				81A7AC662CE51672003E14EE /* UITextFieldExtension.swift in Sources */,
 				81D50ADD2CE0A386008E6CF8 /* MoviesManager.swift in Sources */,
+				81A7AC6C2CE524D9003E14EE /* FavoritesCollectionCell.swift in Sources */,
 				81D50AE42CE0C4F0008E6CF8 /* MovieViewModel.swift in Sources */,
 				81AECBD32CDE1C920021DCF6 /* FavoritesView.swift in Sources */,
 				81D50AE02CE0A39A008E6CF8 /* MoviesEndpoint.swift in Sources */,
 				81ADB96F2CDF3B6000E24201 /* CustomLabel.swift in Sources */,
 				81AECBE62CDE39F10021DCF6 /* CustomButton.swift in Sources */,
+				81A7AC682CE51D69003E14EE /* MovieDetailTabCell.swift in Sources */,
 				81B25D042CDD35CE00FA96E6 /* ViewController.swift in Sources */,
 				81AECBD12CDE1C870021DCF6 /* HomeView.swift in Sources */,
 				81B25D002CDD35CE00FA96E6 /* AppDelegate.swift in Sources */,

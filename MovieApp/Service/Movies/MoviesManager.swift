@@ -26,7 +26,6 @@ class MoviesManager {
             switch result {
             case .success(let success):
                 completion(success.results,nil)
-                print("Type:\(type)")
             case .failure(let error):
                 completion(nil,error)
             }
@@ -34,15 +33,17 @@ class MoviesManager {
         
         
     }
-//    func getMovieDetailInfo(completion : @escaping (([Movies]?,Error?)->Void)){
-//           service.fetchData(urlPath: MoviesEndpoint.popular.url, type: MovieResponse.self){
-//               result in
-//               switch result {
-//               case .success(let success):
-//                   completion(success.results,nil)
-//               case .failure(let error):
-//                   completion(nil,error)
-//               }
-//           }
-//       }
+    func getMovieDetailInfo(id:Int,completion : @escaping ((MovieDetail?,Error?)->Void)){
+        service.fetchData(urlPath: MoviesEndpoint.byId(id: id).url, type: MovieDetail.self){
+               result in
+               switch result {
+               case .success(let success):
+                   completion(success,nil)
+                   print("Url:\(MoviesEndpoint.byId(id: id).url)")
+               case .failure(let error):
+                   completion(nil,error)
+                   print("Error:\(error)")
+               }
+           }
+       }
 }
