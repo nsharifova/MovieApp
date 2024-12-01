@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MovieDetailsView: UIViewController {
     var id: Int?
@@ -13,6 +14,10 @@ class MovieDetailsView: UIViewController {
     private var collectionView: UICollectionView!
     private var selectedTabIndex = 0
     var movieDetail: MovieDetail?
+    var movieViewModel = MovieViewModel()
+    let userId = Auth.auth().currentUser?.uid
+
+
 
     private lazy var label: UILabel = {
         let view = UILabel()
@@ -20,6 +25,14 @@ class MovieDetailsView: UIViewController {
         view.font = .preferredFont(forTextStyle: .headline)
         view.textAlignment = .left
         return view
+    }()
+    private lazy var favoriteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.addTarget(self, action: #selector(buttonHandler), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFill
+        return button
     }()
     
     let image: UIImageView = {
@@ -31,16 +44,43 @@ class MovieDetailsView: UIViewController {
         return imageView
     }()
     
+    @objc func buttonHandler () {
+        let movieData: [String: Any] = [
+            "id" : movieDetail?.belongsToCollection?.id ?? 0,
+            "originalTitle": movieDetail?.originalTitle ?? "",
+            "genre": ["Sci-Fi", "Action"],
+            "releaseDate": movieDetail?.releaseDate ?? "",
+            "posterPath": movieDetail?.backdropPath ?? "",
+        ]
+        movieViewModel.addMovieFavorites(userId: userId ?? "", movieId: String(movieDetail?.belongsToCollection?.id ?? 0), movieData: movieData)
+        movieViewModel.success = {
+            self.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(label)
         view.addSubview(image)
+        view.addSubview(favoriteButton)
         setupCollectionView()
         setUpConstraints()
-
         if let data = movieDetail {
             label.text = data.belongsToCollection?.name
         }
+        movieViewModel.getFavoriteMovies(userId: userId ?? "")
+        movieViewModel.success = {
+            if let movieId = self.movieDetail?.belongsToCollection?.id {
+                if self.movieViewModel.favoriteMovies.contains(where: { $0.id == movieId }) {
+                    self.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                   } else {
+                       self.favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                   }
+               }
+        
+        }
+     
         if let posterPath = movieDetail?.posterPath, let url = URL(string: "https://image.tmdb.org/t/p/original/\(posterPath)") {
             DispatchQueue.global().async {
                 if let data = try? Data(contentsOf: url) {
@@ -88,7 +128,11 @@ class MovieDetailsView: UIViewController {
 
     func setUpConstraints(){
         NSLayoutConstraint.activate([
-            image.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            favoriteButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            favoriteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 50),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 50),
+            image.topAnchor.constraint(equalTo: favoriteButton.bottomAnchor, constant: 16),
             image.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             image.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             image.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),

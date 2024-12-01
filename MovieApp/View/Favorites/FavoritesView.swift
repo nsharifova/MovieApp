@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 
 class FavoritesView: BaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     var movieViewModel = MovieViewModel()
+    let userId = Auth.auth().currentUser?.uid
+    weak var viewController: UIViewController?
+
 
     private let mainTitle = CustomLabel(text: "Favorites", font: UIFont.boldSystemFont(ofSize: 24))
     
@@ -32,22 +36,38 @@ class FavoritesView: BaseViewController,UICollectionViewDelegate,UICollectionVie
         
         view.addSubview(mainTitle)
         view.addSubview(collectionView)
+        self.view.bringSubviewToFront(emptyStateLabel)
+
         setUpConstraints()
         showActivityIndicator(with: CGSize(width: 80, height: 80), color: UIColor.blue)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshItems), name: NSNotification.Name("AddedFavorites"), object: nil)
         self.view.bringSubviewToFront(activityIndicator)
         
-        movieViewModel.getMoviesByCategory()
+        movieViewModel.getFavoriteMovies(userId: userId ?? "")
         movieViewModel.success = {
             self.collectionView.reloadData()
             self.hideActivityIndicator()
+            let isEmpty = self.movieViewModel.favoriteMovies.isEmpty
+                self.updateEmptyStateLabel(
+                    isHidden: !isEmpty,
+                    message: isEmpty ? "You don't have any data yet!" : nil
+                )
+            print("Favoritesss : \(self.movieViewModel.favoriteMovies)")
+
+        
         }
         movieViewModel.error = { error in
-            print(error)
-            
+            self.hideActivityIndicator()
+            self.showErrorAlert(title: "Error", message: error)
+
         }
+
         
         
     }
+    @objc func refreshItems() {
+        movieViewModel.getFavoriteMovies(userId: userId ?? "")
+       }
     func setUpConstraints() {
         NSLayoutConstraint.activate([
            
@@ -64,13 +84,13 @@ class FavoritesView: BaseViewController,UICollectionViewDelegate,UICollectionVie
         ])
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return movieViewModel.favoriteMovies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoritesCollectionCell", for: indexPath) as! FavoritesCollectionCell
-//        let item = movieViewModel.allMovies[indexPath.row]
-//        cell.configure(data:item)
+        let item = movieViewModel.favoriteMovies[indexPath.row]
+        cell.configure(data:item)
 //        cell.viewController = self
 //        cell.movieData = item.movies
         return cell
@@ -78,7 +98,20 @@ class FavoritesView: BaseViewController,UICollectionViewDelegate,UICollectionVie
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 200)
     }
-    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let controller = MovieDetailsView()
+//        let item = movieViewModel.favoriteMovies[indexPath.row]
+//        movieViewModel.getMovieDetailInfo(id: item.id) { result in
+//            switch result {
+//            case .success:
+//                controller.movieDetail = item
+//                self.navigationController?.pushViewController(controller, animated: true)
+//            case .failure(let error):
+//                self.showErrorAlert(title: "Error", message: error.localizedDescription)
+//            }
+//        }
+//    }
+
     
     
 }

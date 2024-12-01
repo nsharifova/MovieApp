@@ -6,6 +6,7 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
     var movieData : [Movies]?
     var movieViewModel = MovieViewModel()
     weak var viewController: UIViewController?
+    weak var movieCollection: MovieCollectionView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +37,7 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
         button.translatesAutoresizingMaskIntoConstraints = false
         button.semanticContentAttribute = .forceRightToLeft
         button.setTitleColor(UIColor(named: "MainBlue"), for: .normal)
+        button.addTarget(self, action: #selector(seeAllAction), for: .touchUpInside)
         return button
     }()
     private lazy var collectionView: UICollectionView = {
@@ -50,7 +52,10 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
         collectionView.register(CarouselItemCell.self, forCellWithReuseIdentifier: "CarouselItemCell")
         return collectionView
     }()
-    
+    @objc func seeAllAction(){
+        movieCollection?.movieData = movieData
+        
+    }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -91,7 +96,6 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = MovieDetailsView()
         guard let movies = movieData else { return }
-        print("Salam")
         
         let item = movies[indexPath.row]
         controller.id = item.id

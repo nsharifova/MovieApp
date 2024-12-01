@@ -10,7 +10,7 @@ import UIKit
 class FavoritesCollectionCell: UICollectionViewCell {
     let image: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
         imageView.image = UIImage(named: "Image1")
@@ -154,18 +154,22 @@ class FavoritesCollectionCell: UICollectionViewCell {
         ])
     }
     
-    func configure(data:Movies) {
+    func configure(data:FavoriteMovie) {
         
-        //        label.text = data.originalTitle
-        //        if let posterPath = data.posterPath, let url = URL(string: "https://image.tmdb.org/t/p/original/\(posterPath)") {
-        //                DispatchQueue.global().async {
-        //                    if let data = try? Data(contentsOf: url) {
-        //                        DispatchQueue.main.async {
-        //                            self.image.image = UIImage(data: data)
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //
+        label.text = data.originalTitle
+        dateLabel.text = data.releaseDate
+        ratingLabel.text = "7.9"
+        priceLabel.text = "4"
+        let posterPath = data.posterPath
+        if let url = URL(string: "https://image.tmdb.org/t/p/original/\(String(describing: posterPath))") {
+               DispatchQueue.global().async {
+                   if let data = try? Data(contentsOf: url) {
+                       DispatchQueue.main.async {
+                           self.image.image = UIImage(data: data)
+                       }
+                   }
+               }
+           }
+        
     }
 }

@@ -18,10 +18,27 @@ class BaseViewController: UIViewController {
         view.color = #colorLiteral(red: 0.1529411765, green: 0.2431372549, blue: 0.4784313725, alpha: 1)
         return view
     }()
+     let emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.zPosition = 1
+
+
+        return label
+    }()
+
    
   
    override func viewDidLoad() {
        super.viewDidLoad()
+       view.addSubview(emptyStateLabel)
+       NSLayoutConstraint.activate([
+           emptyStateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+           emptyStateLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+       ])
       
    }
    
@@ -41,6 +58,13 @@ class BaseViewController: UIViewController {
    override var preferredStatusBarStyle: UIStatusBarStyle {
        return .lightContent
    }
+    func updateEmptyStateLabel(isHidden: Bool, message: String? = nil) {
+        emptyStateLabel.isHidden = isHidden
+        if let message = message {
+            emptyStateLabel.text = message
+        }
+    }
+
    
     func showActivityIndicator(in view: UIView? = nil, with size: CGSize = CGSize(width: 60, height: 60), color: UIColor = #colorLiteral(red: 0.1176470588, green: 0.1490196078, blue: 0.231372549, alpha: 1)) {
        

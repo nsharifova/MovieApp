@@ -64,27 +64,27 @@ struct Movies: Codable, Hashable {
 typealias DataSource = UICollectionViewDiffableDataSource<Section, Movies>
 
 struct MovieDetail: Codable {
-    let adult: Bool
+    let adult: Bool?
     let backdropPath: String?
     let belongsToCollection: BelongsToCollection?
-    let budget: Int
-    let genres: [Genre]
+    let budget: Int?
+    let genres: [Genre]?
     let homepage: String?
-    let id: Int
-    let imdbID: String
-    let originCountry: [String]
+    let id: Int?
+    let imdbID: String?
+    let originCountry: [String]?
     let originalLanguage, originalTitle, overview: String?
-    let popularity: Double
+    let popularity: Double?
     let posterPath: String?
-    let productionCompanies: [ProductionCompany]
-    let productionCountries: [ProductionCountry]
-    let releaseDate: String
+    let productionCompanies: [ProductionCompany]?
+    let productionCountries: [ProductionCountry]?
+    let releaseDate: String?
     let revenue, runtime: Int?
-    let spokenLanguages: [SpokenLanguage]
+    let spokenLanguages: [SpokenLanguage]?
     let status, tagline, title: String?
-    let video: Bool
-    let voteAverage: Double
-    let voteCount: Int
+    let video: Bool?
+    let voteAverage: Double?
+    let voteCount: Int?
     
     enum CodingKeys: String, CodingKey {
            case adult
@@ -154,4 +154,29 @@ struct SpokenLanguage: Codable {
         case iso639_1 = "iso_639_1"
         case name
     }
+}
+
+struct EmptyResponse: Codable {}
+
+
+
+struct FavoriteMovieResponce: Codable {
+    let page: Int?
+    let results: [FavoriteMovie]?
+    let totalPages: Int?
+    let totalResults: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case page
+        case results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+struct FavoriteMovie: Codable {
+    let originalTitle : String
+    let genre : [String]
+    let releaseDate : String
+    let posterPath : String
+    let id : Int
 }

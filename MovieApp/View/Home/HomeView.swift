@@ -49,10 +49,12 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
         movieViewModel.success = {
             self.collectionView.reloadData()
             self.hideActivityIndicator()
+            let isEmpty = self.movieViewModel.allMovies.isEmpty
+                self.updateEmptyStateLabel(isHidden: !isEmpty, message: isEmpty ? "You don't have any data yet!" : nil)
+
         }
         movieViewModel.error = { error in
-            print(error)
-            
+            self.showErrorAlert(title: "Error", message: error)
         }
         
         
