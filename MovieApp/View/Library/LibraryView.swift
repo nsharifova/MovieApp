@@ -8,22 +8,38 @@
 import UIKit
 
 class LibraryView: BaseViewController {
-
+   
+    private let searchField : UITextField = {
+        let field = UITextField()
+        field.placeholder = "Search"
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.borderStyle = .roundedRect
+        field.addPaddingAndIcon(UIImage(named: "SearchIcon")!, padding: 8, isLeftView: false)
+        return field
+    }()
     override func viewDidLoad() {
+        view.addSubview(searchField)
         super.viewDidLoad()
+        setUpConstraints()
 
         // Do any additional setup after loading the view.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setUpConstraints() {
+        NSLayoutConstraint.activate([
+      
+        
+            
+            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                searchField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            searchField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+                searchField.heightAnchor.constraint(equalToConstant: 36) ,
+            
+   
+            
+            
+        ])
     }
-    */
+
+ 
 
 }

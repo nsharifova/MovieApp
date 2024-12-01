@@ -6,7 +6,6 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
     var movieData : [Movies]?
     var movieViewModel = MovieViewModel()
     weak var viewController: UIViewController?
-    weak var movieCollection: MovieCollectionView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,7 +52,12 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
         return collectionView
     }()
     @objc func seeAllAction(){
-        movieCollection?.movieData = movieData
+        let controller = MovieCollectionView()
+        controller.movieData = movieData
+        controller.mainTitle.text = label.text ?? ""
+        viewController?.navigationController?.pushViewController(controller, animated: true)
+
+
         
     }
     
@@ -77,6 +81,8 @@ class HomeCarouselCell: UICollectionViewCell,UICollectionViewDelegate,UICollecti
     
     func configure(data:CategoryMovie) {
         label.text = data.title
+
+        
         
         
     }

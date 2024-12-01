@@ -10,17 +10,13 @@ import UIKit
 class MovieCollectionView: UIViewController,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var movieData : [Movies]?
     var movieViewModel = MovieViewModel()
-    weak var viewController: UIViewController?
-    // Array of system image names
-      let systemImages = ["car", "car.2", "bolt.car",
-                          "house.lodge", "house.and.flag", "music.note.house",
-                          "air.purifier", "air.conditioner.horizontal.fill"]
-      
-      // Lazy initialization of the UICollectionView
-      private lazy var mainCollectionView: UICollectionView = {
+     let mainTitle = CustomLabel(text: "", font: UIFont.boldSystemFont(ofSize: 24))
+    
+    
+            private lazy var mainCollectionView: UICollectionView = {
           let flowLayout = UICollectionViewFlowLayout()
           flowLayout.scrollDirection = .vertical
-          flowLayout.minimumLineSpacing = 0
+          flowLayout.minimumLineSpacing = 24
           flowLayout.minimumInteritemSpacing = 0
           let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
           collectionView.register(MovieCollectionCell.self, forCellWithReuseIdentifier: MovieCollectionCell.identifier)
@@ -35,20 +31,22 @@ class MovieCollectionView: UIViewController,UICollectionViewDelegate, UICollecti
       override func viewDidLoad() {
           super.viewDidLoad()
           setupView()
+
       }
       
-      // Method to reload the collection view on the main thread
       func reloadCollectionView() {
           DispatchQueue.main.async { [weak self] in
               self?.mainCollectionView.reloadData()
           }
       }
       
-      // Setup the view and add collection view with constraints
       private func setupView() {
+          view.addSubview(mainTitle)
           view.addSubview(mainCollectionView)
           NSLayoutConstraint.activate([
-              mainCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            mainTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+              mainCollectionView.topAnchor.constraint(equalTo: mainTitle.bottomAnchor,constant: 24),
               mainCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
               mainCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
               mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -58,7 +56,6 @@ class MovieCollectionView: UIViewController,UICollectionViewDelegate, UICollecti
         return movieData?.count ?? 0
     }
     
-    // Configure and return the cell for a given index path
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionCell.identifier, for: indexPath) as! MovieCollectionCell
         guard let movies = movieData else {
@@ -70,9 +67,8 @@ class MovieCollectionView: UIViewController,UICollectionViewDelegate, UICollecti
       
     }
     
-    // Return the size for the item at a given index path
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = mainCollectionView.frame.width / 3
+        let size = mainCollectionView.frame.width / 2
         return CGSize(width: size, height: size)
     }
   }

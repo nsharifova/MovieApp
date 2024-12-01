@@ -8,16 +8,8 @@ import UIKit
 
 class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     var movieViewModel = MovieViewModel()
-    private let menuIcon = CustomButton(imageName: "MenuIcon", target: HomeView.self)
-    private let searchField : UITextField = {
-        let field = UITextField()
-        field.placeholder = "Search"
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.addPaddingAndIcon(UIImage(named: "SearchIcon")!, padding: 8, isLeftView: false)
-        return field
-    }()
-
+//    private let menuIcon = CustomButton(imageName: "MenuIcon", target: HomeView.self)
+  
     private let mainTitle = CustomLabel(text: "Movies", font: UIFont.boldSystemFont(ofSize: 24))
     
     private lazy var collectionView: UICollectionView = {
@@ -37,8 +29,7 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
     override func viewDidLoad() {
         super.viewDidLoad()
      
-        view.addSubview(menuIcon)
-        view.addSubview(searchField)
+    
         view.addSubview(mainTitle)
         view.addSubview(collectionView)
         setUpConstraints()
@@ -61,17 +52,9 @@ class HomeView: BaseViewController,UICollectionViewDelegate,UICollectionViewData
     }
     func setUpConstraints() {
         NSLayoutConstraint.activate([
-            menuIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            menuIcon.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
-            menuIcon.widthAnchor.constraint(equalToConstant: 24),
-            menuIcon.heightAnchor.constraint(equalToConstant: 24),
+           
             
-            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                searchField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
-                searchField.leadingAnchor.constraint(equalTo: menuIcon.trailingAnchor, constant: 16),
-                searchField.heightAnchor.constraint(equalToConstant: 36) ,
-            
-            mainTitle.topAnchor.constraint(equalTo: menuIcon.bottomAnchor, constant: 24),
+            mainTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             mainTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
             
             collectionView.topAnchor.constraint(equalTo: mainTitle.bottomAnchor,constant: 24),
